@@ -1,4 +1,4 @@
-defmodule TodoBackend.User.Model do
+defmodule TodoBackend.User.Repository.UserRepo do
   @moduledoc """
   The User.Model context.
   """

@@ -1,4 +1,4 @@
-defmodule TodoBackend.Category.Model do
+defmodule TodoBackend.Category.Repository.CategoryRepo do
   @moduledoc """
   The Category.Model context.
   """

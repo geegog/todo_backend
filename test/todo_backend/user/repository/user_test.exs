@@ -1,7 +1,7 @@
-defmodule TodoBackend.User.ModelTest do
+defmodule TodoBackend.User.Repository.UserTest do
   use TodoBackend.DataCase
 
-  alias TodoBackend.User.Model
+  alias TodoBackend.User.Repository.UserRepo
 
   describe "users" do
     alias TodoBackend.User.Model.User
@@ -14,35 +14,35 @@ defmodule TodoBackend.User.ModelTest do
       {:ok, user} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> Model.create_user()
+        |> UserRepo.create_user()
 
       user
     end
 
     test "list_users/0 returns all users" do
       user = user_fixture()
-      assert Model.list_users() == [user]
+      assert UserRepo.list_users() == [user]
     end
 
     test "get_user!/1 returns the user with given id" do
       user = user_fixture()
-      assert Model.get_user!(user.id) == user
+      assert UserRepo.get_user!(user.id) == user
     end
 
     test "create_user/1 with valid data creates a user" do
-      assert {:ok, %User{} = user} = Model.create_user(@valid_attrs)
+      assert {:ok, %User{} = user} = UserRepo.create_user(@valid_attrs)
       assert user.email == "some email"
       assert user.name == "some name"
       assert user.phone == "some phone"
     end
 
     test "create_user/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Model.create_user(@invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = UserRepo.create_user(@invalid_attrs)
     end
 
     test "update_user/2 with valid data updates the user" do
       user = user_fixture()
-      assert {:ok, %User{} = user} = Model.update_user(user, @update_attrs)
+      assert {:ok, %User{} = user} = UserRepo.update_user(user, @update_attrs)
       assert user.email == "some updated email"
       assert user.name == "some updated name"
       assert user.phone == "some updated phone"
@@ -50,19 +50,19 @@ defmodule TodoBackend.User.ModelTest do
 
     test "update_user/2 with invalid data returns error changeset" do
       user = user_fixture()
-      assert {:error, %Ecto.Changeset{}} = Model.update_user(user, @invalid_attrs)
-      assert user == Model.get_user!(user.id)
+      assert {:error, %Ecto.Changeset{}} = UserRepo.update_user(user, @invalid_attrs)
+      assert user == UserRepo.get_user!(user.id)
     end
 
     test "delete_user/1 deletes the user" do
       user = user_fixture()
-      assert {:ok, %User{}} = Model.delete_user(user)
-      assert_raise Ecto.NoResultsError, fn -> Model.get_user!(user.id) end
+      assert {:ok, %User{}} = UserRepo.delete_user(user)
+      assert_raise Ecto.NoResultsError, fn -> UserRepo.get_user!(user.id) end
     end
 
     test "change_user/1 returns a user changeset" do
       user = user_fixture()
-      assert %Ecto.Changeset{} = Model.change_user(user)
+      assert %Ecto.Changeset{} = UserRepo.change_user(user)
     end
   end
 end
