@@ -3,9 +3,9 @@ defmodule TodoBackend.Repo.Migrations.CreateTodos do
 
   def change do
     create table(:todos) do
-      add :title, :string
-      add :description, :string
       add :deadline, :naive_datetime
+      add :description, :string
+      add :title, :string
       add :user_id, references(:users, on_delete: :nothing)
 
       timestamps()

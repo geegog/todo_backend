@@ -1,7 +1,6 @@
-defmodule TodoBackend.User.Model.Category do
+defmodule TodoBackend.Category.Model.Category do
   use Ecto.Schema
   import Ecto.Changeset
-
 
   schema "categories" do
     field :name, :string

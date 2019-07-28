@@ -1,12 +1,11 @@
-defmodule TodoBackend.User.Model.Comment do
+defmodule TodoBackend.Task.Model.Comment do
   use Ecto.Schema
   import Ecto.Changeset
 
-
   schema "comments" do
     field :text, :string
-    field :todo_id, :id
     field :user_id, :id
+    field :todo_id, :id
 
     timestamps()
   end

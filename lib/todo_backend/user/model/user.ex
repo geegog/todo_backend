@@ -2,7 +2,6 @@ defmodule TodoBackend.User.Model.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-
   schema "users" do
     field :email, :string
     field :name, :string
@@ -14,7 +13,8 @@ defmodule TodoBackend.User.Model.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:name, :email, :phone])
-    |> validate_required([:name, :email, :phone])
+    |> cast(attrs, [:email, :name, :phone])
+    |> validate_required([:email, :name, :phone])
+    |> unique_constraint(:email)
   end
 end
