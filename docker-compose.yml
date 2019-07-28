@@ -21,14 +21,14 @@ services:
       - "4000:4000"
     depends_on:
       - postgres
-    networks: 
+    networks:
       - my-network
 
   postgres:
     image: postgres:latest
     ports:
       - "5432:5432"
-    networks: 
+    networks:
       - my-network
 
 networks:
