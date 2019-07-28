@@ -6,7 +6,7 @@ defmodule TodoBackend.Task.Model.Todo do
     field :deadline, :naive_datetime
     field :description, :string
     field :title, :string
-    field :user_id, :id
+    belongs_to :user, TodoBackend.User.Model.User
 
     timestamps()
   end

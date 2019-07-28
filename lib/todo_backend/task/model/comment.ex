@@ -4,8 +4,8 @@ defmodule TodoBackend.Task.Model.Comment do
 
   schema "comments" do
     field :text, :string
-    field :user_id, :id
-    field :todo_id, :id
+    belongs_to :user, TodoBackend.User.Model.User
+    belongs_to :todo, TodoBackend.Task.Model.Todo
 
     timestamps()
   end

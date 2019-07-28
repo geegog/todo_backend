@@ -3,8 +3,8 @@ defmodule TodoBackend.Category.Model.TodoCategory do
   import Ecto.Changeset
 
   schema "todo_categories" do
-    field :todo_id, :id
-    field :category_id, :id
+    belongs_to :todo, TodoBackend.Task.Model.Todo
+    belongs_to :category, TodoBackend.Category.Model.Category
 
     timestamps()
   end
