@@ -8,7 +8,7 @@ defmodule TodoBackendWeb.Router do
   end
 
   pipeline :jwt_authenticated do
-    plug TodoBackend.Guardian.AuthPipeline
+    plug Guardian.AuthPipeline
   end
 
   scope "/api/v1", TodoBackendWeb do
