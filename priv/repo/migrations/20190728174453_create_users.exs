@@ -6,6 +6,7 @@ defmodule TodoBackend.Repo.Migrations.CreateUsers do
       add :email, :string
       add :name, :string
       add :phone, :string
+      add :password_hash, :string
 
       timestamps()
     end
