@@ -16,4 +16,8 @@ defmodule TodoBackendWeb.UserView do
       name: user.name,
       phone: user.phone}
   end
+
+  def render("jwt.json", %{jwt: jwt}) do
+    %{jwt: jwt}
+  end
 end

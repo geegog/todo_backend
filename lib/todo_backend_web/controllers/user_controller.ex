@@ -3,6 +3,7 @@ defmodule TodoBackendWeb.UserController do
 
   alias TodoBackend.User.Repository.UserRepo
   alias TodoBackend.User.Model.User
+  alias TodoBackend.Guardian
 
   action_fallback TodoBackendWeb.FallbackController
 
@@ -12,11 +13,12 @@ defmodule TodoBackendWeb.UserController do
   end
 
   def create(conn, %{"user" => user_params}) do
-    with {:ok, %User{} = user} <- UserRepo.create_user(user_params) do
+    with {:ok, %User{} = user} <- UserRepo.create_user(user_params),
+        {:ok, token, _claims} <- Guardian.encode_and_sign(user) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", Routes.user_path(conn, :show, user))
-      |> render("show.json", user: user)
+      #|> put_resp_header("location", Routes.user_path(conn, :show, user))
+      |> render("jwt.json", jwt: token)
     end
   end
 
