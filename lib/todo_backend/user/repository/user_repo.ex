@@ -8,10 +8,10 @@ defmodule TodoBackend.User.Repository.UserRepo do
 
   alias TodoBackend.User.Model.User
   alias TodoBackend.Guardian
-  import Bcrypt, only: [check_pass: 2, no_user_verify: 0]
+  import Argon2, only: [check_pass: 2, no_user_verify: 0]
 
   @doc """
-  Returns an encoded and signd token for the authenticated user
+  Returns an encoded and signed token for the authenticated user
 
   """
   def token_sign_in(email, password) do
@@ -23,24 +23,11 @@ defmodule TodoBackend.User.Repository.UserRepo do
     end
   end
 
-  @doc """
-  Returns a user with valid email and password.
-
-  """
   defp email_password_auth(email, password) when is_binary(email) and is_binary(password) do
     with {:ok, user} <- get_by_email(email),
     do: verify_password(password, user)
   end
 
-  @doc """
-  Returns a user.
-
-  ## Examples
-
-      iex> get_by_email("example@test.com")
-      {:ok, %User{}}
-
-  """
   defp get_by_email(email) when is_binary(email) do
     case Repo.get_by(User, email: email) do
       nil ->
@@ -51,15 +38,6 @@ defmodule TodoBackend.User.Repository.UserRepo do
     end
   end
 
-  @doc """
-  Returns a verified user using password or error message.
-
-  ## Examples
-
-      iex> verify_password("password", user)
-      {:ok, %User{}}
-
-  """
   defp verify_password(password, %User{} = user) when is_binary(password) do
     user
     |> check_pass(password)

@@ -1,4 +1,5 @@
 %{
+  "argon2_elixir": {:hex, :argon2_elixir, "2.0.5", "0073a87d755c7e63fc4f9d08b1d1646585b93f144cecde126e15061b24240b20", [:make, :mix], [{:comeonin, "~> 5.1", [hex: :comeonin, repo: "hexpm", optional: false]}, {:elixir_make, "~> 0.5", [hex: :elixir_make, repo: "hexpm", optional: false]}], "hexpm"},
   "base64url": {:hex, :base64url, "0.0.1", "36a90125f5948e3afd7be97662a1504b934dd5dac78451ca6e9abf85a10286be", [:rebar], [], "hexpm"},
   "bcrypt_elixir": {:hex, :bcrypt_elixir, "2.0.3", "64e0792d5b5064391927bf3b8e436994cafd18ca2d2b76dea5c76e0adcf66b7c", [:make, :mix], [{:comeonin, "~> 5.1", [hex: :comeonin, repo: "hexpm", optional: false]}, {:elixir_make, "~> 0.4", [hex: :elixir_make, repo: "hexpm", optional: false]}], "hexpm"},
   "comeonin": {:hex, :comeonin, "5.1.2", "fbbbbbfcf0f0e9900c0336d16c8d462edf838ba1759577e29cc5fbd7c28a4540", [:mix], [], "hexpm"},

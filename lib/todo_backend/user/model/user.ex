@@ -1,7 +1,7 @@
 defmodule TodoBackend.User.Model.User do
   use Ecto.Schema
   import Ecto.Changeset
-  import Bcrypt, only: [hash_pwd_salt: 1]
+  import Argon2, only: [hash_pwd_salt: 1]
 
   schema "users" do
     field :email, :string
@@ -31,7 +31,7 @@ defmodule TodoBackend.User.Model.User do
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{password: pass}}
         ->
-          put_change(changeset, :password_hash, Bcrypt.hash_pwd_salt(pass))
+          put_change(changeset, :password_hash, Argon2.hash_pwd_salt(pass))
       _ ->
           changeset
     end
