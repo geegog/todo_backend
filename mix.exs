@@ -40,7 +40,6 @@ defmodule TodoBackend.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:joken, "~> 2.0"},
       {:plug_cowboy, "~> 2.0"},
       {:comeonin, "~> 5.1.2"},
       {:bcrypt_elixir, "~> 2.0"},

@@ -1,5 +1,5 @@
-defmodule MyApi.Guardian.AuthPipeline do
-  use Guardian.Plug.Pipeline, otp_app: :TodoBackend,
+defmodule TodoBackend.Guardian.AuthPipeline do
+  use Guardian.Plug.Pipeline, otp_app: :todo_backend,
   module: TodoBackend.Guardian,
   error_handler: TodoBackend.AuthErrorHandler
 
