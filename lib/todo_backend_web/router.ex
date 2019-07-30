@@ -23,8 +23,11 @@ defmodule TodoBackendWeb.Router do
     get "/my_user", UserController, :show
 
     post "/todo/:id/update", TodoController, :update
-    post "/todo/:id/create", TodoController, :create
+    post "/todo/user/:user_id/create", TodoController, :create
     get "/todo/:id/view", TodoController, :show
     get "/todo/all", TodoController, :index
+
+    post "/comment/user/:user_id/todo/:todo_id/create", CommentController, :create
+    get "/comment/all", CommentController, :index
   end
 end

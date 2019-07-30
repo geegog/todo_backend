@@ -15,6 +15,6 @@ defmodule TodoBackend.Task.Model.Todo do
   def changeset(todo, attrs) do
     todo
     |> cast(attrs, [:deadline, :description, :title, :user_id])
-    |> validate_required([:deadline, :description, :title])
+    |> validate_required([:deadline, :description, :title, :user_id])
   end
 end

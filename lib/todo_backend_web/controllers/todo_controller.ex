@@ -12,10 +12,10 @@ defmodule TodoBackendWeb.TodoController do
     render(conn, "index.json", todos: todos)
   end
 
-  def create(conn, %{"id" => id, "todo" => todo_params}) do
-    user = UserRepo.get_user!(id)
+  def create(conn, %{"user_id" => user_id, "todo" => todo_params}) do
+    user = UserRepo.get_user!(user_id)
 
-    with {:ok, %Todo{} = todo} <- TodoRepo.create_todo(Map.put(todo_params, "user_id", id)) do
+    with {:ok, %Todo{} = todo} <- TodoRepo.create_todo(Map.put(todo_params, "user_id", user.id)) do
       conn
       |> put_status(:created)
       |> render("todo.json", todo: TodoRepo.preload(todo))

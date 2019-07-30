@@ -2,6 +2,8 @@ defmodule TodoBackendWeb.CommentController do
   use TodoBackendWeb, :controller
 
   alias TodoBackend.Task.Repository.CommentRepo
+  alias TodoBackend.User.Repository.UserRepo
+  alias TodoBackend.Task.Repository.TodoRepo
   alias TodoBackend.Task.Model.Comment
 
   action_fallback TodoBackendWeb.FallbackController
@@ -11,11 +13,13 @@ defmodule TodoBackendWeb.CommentController do
     render(conn, "index.json", comments: comments)
   end
 
-  def create(conn, %{"comment" => comment_params}) do
-    with {:ok, %Comment{} = comment} <- CommentRepo.create_comment(comment_params) do
+  def create(conn, %{"user_id" => user_id, "todo_id" => todo_id, "comment" => comment_params}) do
+    user = UserRepo.get_user!(user_id)
+    todo = TodoRepo.get_todo!(todo_id)
+
+    with {:ok, %Comment{} = comment} <- CommentRepo.create_comment(Map.put(comment_params, "user_id", user.id) |> Map.put("todo_id", todo.id)) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", Routes.comment_path(conn, :show, comment))
       |> render("show.json", comment: comment)
     end
   end

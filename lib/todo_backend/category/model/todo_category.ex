@@ -12,7 +12,7 @@ defmodule TodoBackend.Category.Model.TodoCategory do
   @doc false
   def changeset(todo_category, attrs) do
     todo_category
-    |> cast(attrs, [])
-    |> validate_required([])
+    |> cast(attrs, [:todo_id, :user_id])
+    |> validate_required([:todo_id, :user_id])
   end
 end
