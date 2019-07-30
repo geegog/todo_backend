@@ -19,6 +19,7 @@ defmodule TodoBackend.Task.Repository.TodoRepo do
   """
   def list_todos do
     Repo.all(Todo)
+    |> Repo.preload(:user)
   end
 
   @doc """
@@ -35,7 +36,7 @@ defmodule TodoBackend.Task.Repository.TodoRepo do
       ** (Ecto.NoResultsError)
 
   """
-  def get_todo!(id), do: Repo.get!(Todo, id)
+  def get_todo!(id), do: Repo.get!(Todo, id) |> Repo.preload(:user)
 
   @doc """
   Creates a todo.
@@ -53,6 +54,11 @@ defmodule TodoBackend.Task.Repository.TodoRepo do
     %Todo{}
     |> Todo.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def preload(%Todo{} = todo) do
+    todo
+    |> Repo.preload(:user)
   end
 
   @doc """

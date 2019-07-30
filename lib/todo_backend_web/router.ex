@@ -21,5 +21,10 @@ defmodule TodoBackendWeb.Router do
     pipe_through [:api, :jwt_authenticated]
 
     get "/my_user", UserController, :show
+
+    post "/todo/:id/update", TodoController, :update
+    post "/todo/:id/create", TodoController, :create
+    get "/todo/:id/view", TodoController, :show
+    get "/todo/all", TodoController, :index
   end
 end

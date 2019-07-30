@@ -11,9 +11,12 @@ defmodule TodoBackendWeb.TodoView do
   end
 
   def render("todo.json", %{todo: todo}) do
-    %{id: todo.id,
+    %{
+      id: todo.id,
       deadline: todo.deadline,
       description: todo.description,
-      title: todo.title}
+      title: todo.title,
+      user: %{id: todo.user.id, email: todo.user.email, phone: todo.user.phone, name: todo.user.name}
+    }
   end
 end

@@ -2,6 +2,7 @@ defmodule TodoBackendWeb.TodoController do
   use TodoBackendWeb, :controller
 
   alias TodoBackend.Task.Repository.TodoRepo
+  alias TodoBackend.User.Repository.UserRepo
   alias TodoBackend.Task.Model.Todo
 
   action_fallback TodoBackendWeb.FallbackController
@@ -11,12 +12,13 @@ defmodule TodoBackendWeb.TodoController do
     render(conn, "index.json", todos: todos)
   end
 
-  def create(conn, %{"todo" => todo_params}) do
-    with {:ok, %Todo{} = todo} <- TodoRepo.create_todo(todo_params) do
+  def create(conn, %{"id" => id, "todo" => todo_params}) do
+    user = UserRepo.get_user!(id)
+
+    with {:ok, %Todo{} = todo} <- TodoRepo.create_todo(Map.put(todo_params, "user_id", id)) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", Routes.todo_path(conn, :show, todo))
-      |> render("show.json", todo: todo)
+      |> render("todo.json", todo: TodoRepo.preload(todo))
     end
   end
 
