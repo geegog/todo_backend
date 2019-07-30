@@ -20,7 +20,7 @@ defmodule TodoBackendWeb.CommentController do
     with {:ok, %Comment{} = comment} <- CommentRepo.create_comment(Map.put(comment_params, "user_id", user.id) |> Map.put("todo_id", todo.id)) do
       conn
       |> put_status(:created)
-      |> render("show.json", comment: comment)
+      |> render("show.json", comment: comment |> CommentRepo.preload)
     end
   end
 

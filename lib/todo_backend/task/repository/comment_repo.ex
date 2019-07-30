@@ -18,7 +18,7 @@ defmodule TodoBackend.Task.Repository.CommentRepo do
 
   """
   def list_comments do
-    Repo.all(Comment)
+    Repo.all(Comment) |> Repo.preload(:user) |> Repo.preload(:todo)
   end
 
   @doc """
@@ -35,7 +35,7 @@ defmodule TodoBackend.Task.Repository.CommentRepo do
       ** (Ecto.NoResultsError)
 
   """
-  def get_comment!(id), do: Repo.get!(Comment, id)
+  def get_comment!(id), do: Repo.get!(Comment, id) |> Repo.preload(:user) |> Repo.preload(:todo)
 
   @doc """
   Creates a comment.
@@ -53,6 +53,12 @@ defmodule TodoBackend.Task.Repository.CommentRepo do
     %Comment{}
     |> Comment.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def preload(%Comment{} = comment) do
+    comment
+    |> Repo.preload(:user)
+    |> Repo.preload(:todo)
   end
 
   @doc """

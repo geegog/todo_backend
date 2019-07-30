@@ -18,7 +18,7 @@ defmodule TodoBackendWeb.TodoController do
     with {:ok, %Todo{} = todo} <- TodoRepo.create_todo(Map.put(todo_params, "user_id", user.id)) do
       conn
       |> put_status(:created)
-      |> render("todo.json", todo: TodoRepo.preload(todo))
+      |> render("show.json", todo: TodoRepo.preload(todo))
     end
   end
 
