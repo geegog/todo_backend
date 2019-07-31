@@ -2,10 +2,7 @@ use Mix.Config
 
 # Configure your database
 config :todo_backend, TodoBackend.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "todo_backend_test",
-  hostname: "localhost",
+  url: System.get_env("DATABASE_URL"),
   pool: Ecto.Adapters.SQL.Sandbox
 
 # We don't run a server during test. If one is required,

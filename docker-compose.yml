@@ -23,6 +23,18 @@ services:
       - postgres
     networks:
       - my-network
+  test:
+    image: docker.io/geegog/docker-phoenix
+    command: mix test
+    environment:
+      - MIX_ENV=test
+      - DATABASE_URL=ecto://postgres:postgres@postgres/todo_backend_test
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+    networks:
+      - my-network
 
   postgres:
     image: postgres:latest
