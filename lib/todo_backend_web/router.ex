@@ -31,5 +31,15 @@ defmodule TodoBackendWeb.Router do
     post "/comment/user/:user_id/todo/:todo_id/create", CommentController, :create
     get "/comment/all", CommentController, :index
     get "/comment/:id/view", CommentController, :show
+
+    post "/category/:id/update", CategoryController, :update
+    post "/category/create", CategoryController, :create
+    get "/category/all", CategoryController, :index
+    get "/category/:id/view", CategoryController, :show
+
+    post "/todo_category/:id/update", TodoCategoryController, :update
+    post "/todo_category/category/:category_id/todo/:todo_id/create", TodoCategoryController, :create
+    get "/todo_category/all", TodoCategoryController, :index
+    get "/todo_category/:id/view", TodoCategoryController, :show
   end
 end

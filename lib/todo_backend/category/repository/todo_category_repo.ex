@@ -18,7 +18,7 @@ defmodule TodoBackend.Category.Repository.TodoCategoryRepo do
 
   """
   def list_todo_categories do
-    Repo.all(TodoCategory)
+    Repo.all(TodoCategory) |> Repo.preload(:todo) |> Repo.preload(:category)
   end
 
   @doc """
@@ -35,7 +35,7 @@ defmodule TodoBackend.Category.Repository.TodoCategoryRepo do
       ** (Ecto.NoResultsError)
 
   """
-  def get_todo_category!(id), do: Repo.get!(TodoCategory, id)
+  def get_todo_category!(id), do: Repo.get!(TodoCategory, id) |> Repo.preload(:todo) |> Repo.preload(:category)
 
   @doc """
   Creates a todo_category.
@@ -53,6 +53,12 @@ defmodule TodoBackend.Category.Repository.TodoCategoryRepo do
     %TodoCategory{}
     |> TodoCategory.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def preload(%TodoCategory{} = todo_category) do
+    todo_category
+    |> Repo.preload(:todo)
+    |> Repo.preload(:category)
   end
 
   @doc """

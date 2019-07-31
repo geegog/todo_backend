@@ -18,6 +18,7 @@ defmodule TodoBackendWeb.TodoController do
     with {:ok, %Todo{} = todo} <- TodoRepo.create_todo(Map.put(todo_params, "user_id", user.id)) do
       conn
       |> put_status(:created)
+      |> put_resp_header("location", Routes.todo_path(conn, :show, todo))
       |> render("show.json", todo: TodoRepo.preload(todo))
     end
   end

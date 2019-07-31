@@ -2,6 +2,8 @@ defmodule TodoBackendWeb.TodoCategoryController do
   use TodoBackendWeb, :controller
 
   alias TodoBackend.Category.Repository.TodoCategoryRepo
+  alias TodoBackend.Task.Repository.TodoRepo
+  alias TodoBackend.Category.Repository.CategoryRepo
   alias TodoBackend.Category.Model.TodoCategory
 
   action_fallback TodoBackendWeb.FallbackController
@@ -11,12 +13,15 @@ defmodule TodoBackendWeb.TodoCategoryController do
     render(conn, "index.json", todo_categories: todo_categories)
   end
 
-  def create(conn, %{"todo_category" => todo_category_params}) do
-    with {:ok, %TodoCategory{} = todo_category} <- TodoCategoryRepo.create_todo_category(todo_category_params) do
+  def create(conn, %{"category_id" => category_id, "todo_id" => todo_id}) do
+    category = CategoryRepo.get_category!(category_id)
+    todo = TodoRepo.get_todo!(todo_id)
+
+    with {:ok, %TodoCategory{} = todo_category} <- TodoCategoryRepo.create_todo_category(%{"category_id" => category.id, "todo_id" => todo.id}) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.todo_category_path(conn, :show, todo_category))
-      |> render("show.json", todo_category: todo_category)
+      |> render("show.json", todo_category: todo_category |> TodoCategoryRepo.preload)
     end
   end
 
