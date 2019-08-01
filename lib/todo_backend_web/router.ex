@@ -21,23 +21,30 @@ defmodule TodoBackendWeb.Router do
     pipe_through [:api, :jwt_authenticated]
 
     get "/my_user", UserController, :show
+    get "/user/all", UserController, :index
+    put "/user/:id/update", UserController, :update
+    delete "/user/:id/delete", UserController, :delete
 
-    post "/todo/:id/update", TodoController, :update
+    put "/todo/:id/update", TodoController, :update
+    delete "/todo/:id/delete", TodoController, :delete
     post "/todo/user/:user_id/create", TodoController, :create
     get "/todo/:id/view", TodoController, :show
     get "/todo/all", TodoController, :index
 
-    post "/comment/:id/update", CommentController, :update
+    put "/comment/:id/update", CommentController, :update
+    delete "/comment/:id/delete", CommentController, :delete
     post "/comment/user/:user_id/todo/:todo_id/create", CommentController, :create
     get "/comment/all", CommentController, :index
     get "/comment/:id/view", CommentController, :show
 
-    post "/category/:id/update", CategoryController, :update
+    put "/category/:id/update", CategoryController, :update
+    delete "/category/:id/delete", CategoryController, :delete
     post "/category/create", CategoryController, :create
     get "/category/all", CategoryController, :index
     get "/category/:id/view", CategoryController, :show
 
-    post "/todo_category/:id/update", TodoCategoryController, :update
+    put "/todo_category/:id/update", TodoCategoryController, :update
+    delete "/todo_category/:id/delete", TodoCategoryController, :delete
     post "/todo_category/category/:category_id/todo/:todo_id/create", TodoCategoryController, :create
     get "/todo_category/all", TodoCategoryController, :index
     get "/todo_category/:id/view", TodoCategoryController, :show
