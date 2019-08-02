@@ -5,6 +5,14 @@ defmodule TodoBackendWeb.UserControllerTest do
   alias TodoBackend.User.Repository.UserRepo
   alias TodoBackend.Guardian
 
+  @create_another_attrs %{
+    email: "another@email.com",
+    name: "another name",
+    phone: "another phone",
+    password: "anotherpassword",
+    password_confirmation: "anotherpassword"
+  }
+
   @create_attrs %{
     email: "some@email.com",
     name: "some name",
@@ -21,38 +29,33 @@ defmodule TodoBackendWeb.UserControllerTest do
 
   def fixture(:user) do
     {:ok, user} = UserRepo.create_user(@create_attrs)
-    user
+    {:ok, jwt, _claims} = Guardian.encode_and_sign(user)
+    %{user: user, jwt: jwt}
   end
 
   setup %{conn: conn} do
-    user = fixture(:user)
-    {:ok, jwt, _claims} = Guardian.encode_and_sign(user)
     conn = conn
-    |> put_req_header("authorization", "Bearer #{jwt}")
     |> put_req_header("accept", "application/json")
+
     {:ok, conn: conn}
   end
 
   describe "index" do
-    test "lists all users", %{conn: conn} do
+    setup [:create_user]
+
+    test "lists all users", %{conn: conn, user: %{user: _, jwt: jwt} = user} do
+      conn = conn
+      |> put_req_header("authorization", "Bearer #{jwt}")
+
       conn = get(conn, Routes.user_path(conn, :index))
-      assert json_response(conn, 200)["data"] == []
+      assert length(json_response(conn, 200)["data"]) == length([user.user])
     end
   end
 
   describe "create user" do
     test "renders user when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.user_path(conn, :create), user: @create_attrs)
+      conn = post(conn, Routes.user_path(conn, :create), user: @create_another_attrs)
       assert %{"jwt" => jwt} = json_response(conn, 201)
-
-      conn = get(conn, Routes.user_path(conn, :show))
-
-      assert %{
-               "id" => id,
-               "email" => "some@email.com",
-               "name" => "some name",
-               "phone" => "some phone"
-             } = json_response(conn, 200)["data"]
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -64,8 +67,12 @@ defmodule TodoBackendWeb.UserControllerTest do
   describe "update user" do
     setup [:create_user]
 
-    test "renders user when data is valid", %{conn: conn, user: %User{id: id} = user} do
-      conn = put(conn, Routes.user_path(conn, :update, user), user: @update_attrs)
+    test "renders user when data is valid", %{conn: conn, user: %{user: %User{id: id}, jwt: jwt} = user} do
+      conn = conn
+      |> put_req_header("authorization", "Bearer #{jwt}")
+      IO.inspect(user.user)
+      conn = put(conn, Routes.user_path(conn, :update, user.user), user: @update_attrs)
+      IO.inspect(json_response(conn, 200)["data"])
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
       conn = get(conn, Routes.user_path(conn, :show, id))
@@ -79,7 +86,10 @@ defmodule TodoBackendWeb.UserControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn, user: user} do
-      conn = put(conn, Routes.user_path(conn, :update, user), user: @invalid_attrs)
+      jwt = user.jwt
+      conn = conn
+      |> put_req_header("authorization", "Bearer #{jwt}")
+      conn = put(conn, Routes.user_path(conn, :update, user.user), user: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -87,8 +97,11 @@ defmodule TodoBackendWeb.UserControllerTest do
   describe "delete user" do
     setup [:create_user]
 
-    test "deletes chosen user", %{conn: conn, user: user} do
-      conn = delete(conn, Routes.user_path(conn, :delete, user))
+    test "deletes chosen user", %{conn: conn, user: %{user: _, jwt: jwt} = user} do
+      conn = conn
+      |> put_req_header("authorization", "Bearer #{jwt}")
+
+      conn = delete(conn, Routes.user_path(conn, :delete, user.user))
       assert response(conn, 204)
 
       assert_error_sent 404, fn ->
