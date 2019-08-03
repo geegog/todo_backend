@@ -18,23 +18,29 @@ defmodule TodoBackend.User.Model.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:email, :name, :phone, :password, :password_confirmation])
-    |> validate_required([:email, :name, :phone, :password, :password_confirmation])
-    |> validate_format(:email, ~r/@/) # Check that email is valid
-    |> validate_length(:password, min: 8) # Check that password length is >= 8
-    |> validate_confirmation(:password) # Check that password === password_confirmation
+    |> cast(attrs, [:email, :name, :phone])
+    |> validate_required([:email, :name, :phone])
+    |> validate_format(:email, ~r/@/)
     |> unique_constraint(:email)
+  end
+
+  def registration_changeset(user, attrs) do
+    user
+    |> changeset(attrs)
+    |> cast(attrs, [:password, :password_confirmation])
+    |> validate_required([:password, :password_confirmation])
+    |> validate_length(:password, min: 8)
+    |> validate_confirmation(:password)
     |> put_password_hash
   end
 
   defp put_password_hash(changeset) do
     case changeset do
-      %Ecto.Changeset{valid?: true, changes: %{password: pass}}
-        ->
-          put_change(changeset, :password_hash, Argon2.hash_pwd_salt(pass))
+      %Ecto.Changeset{valid?: true, changes: %{password: pass}} ->
+        put_change(changeset, :password_hash, Argon2.hash_pwd_salt(pass))
+
       _ ->
-          changeset
+        changeset
     end
   end
-
 end

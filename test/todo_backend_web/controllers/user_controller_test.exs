@@ -70,12 +70,10 @@ defmodule TodoBackendWeb.UserControllerTest do
     test "renders user when data is valid", %{conn: conn, user: %{user: %User{id: id}, jwt: jwt} = user} do
       conn = conn
       |> put_req_header("authorization", "Bearer #{jwt}")
-      IO.inspect(user.user)
       conn = put(conn, Routes.user_path(conn, :update, user.user), user: @update_attrs)
-      IO.inspect(json_response(conn, 200)["data"])
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
-      conn = get(conn, Routes.user_path(conn, :show, id))
+      conn = get(conn, Routes.user_path(conn, :show))
 
       assert %{
                "id" => id,
