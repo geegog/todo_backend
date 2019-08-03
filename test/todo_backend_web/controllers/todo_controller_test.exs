@@ -1,8 +1,19 @@
 defmodule TodoBackendWeb.TodoControllerTest do
   use TodoBackendWeb.ConnCase
 
-  alias TodoBackend.Task.Model
   alias TodoBackend.Task.Model.Todo
+  alias TodoBackend.User.Model.User
+  alias TodoBackend.Task.Repository.TodoRepo
+  alias TodoBackend.User.Repository.UserRepo
+  alias TodoBackend.Guardian
+
+  @create_user_attrs %{
+    email: "some@email.com",
+    name: "some name",
+    phone: "some phone",
+    password: "password",
+    password_confirmation: "password"
+  }
 
   @create_attrs %{
     deadline: ~N[2010-04-17 14:00:00],
@@ -17,8 +28,15 @@ defmodule TodoBackendWeb.TodoControllerTest do
   @invalid_attrs %{deadline: nil, description: nil, title: nil}
 
   def fixture(:todo) do
-    {:ok, todo} = Model.create_todo(@create_attrs)
-    todo
+    user = user_fixture(:user)
+    {:ok, todo} = TodoRepo.create_todo(@create_attrs |> Map.put(:user_id, user.user.id))
+    {todo, user.jwt}
+  end
+
+  def user_fixture(:user) do
+    {:ok, user} = UserRepo.create_user(@create_user_attrs)
+    {:ok, jwt, _claims} = Guardian.encode_and_sign(user)
+    %{user: user, jwt: jwt}
   end
 
   setup %{conn: conn} do
@@ -26,15 +44,26 @@ defmodule TodoBackendWeb.TodoControllerTest do
   end
 
   describe "index" do
-    test "lists all todos", %{conn: conn} do
+    setup [:create_todo]
+
+    test "lists all todos", %{conn: conn, todo: todo} do
+      jwt = elem(todo, 1)
+      conn = conn
+      |> put_req_header("authorization", "Bearer #{jwt}")
+
       conn = get(conn, Routes.todo_path(conn, :index))
-      assert json_response(conn, 200)["data"] == []
+      assert length(json_response(conn, 200)["data"]) == length([elem(todo, 0)])
     end
   end
 
   describe "create todo" do
-    test "renders todo when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.todo_path(conn, :create), todo: @create_attrs)
+    setup [:create_user]
+
+    test "renders todo when data is valid", %{conn: conn, user: %{user: %User{id: id}, jwt: jwt} = user} do
+      conn = conn
+      |> put_req_header("authorization", "Bearer #{jwt}")
+
+      conn = post(conn, Routes.todo_path(conn, :create, id), todo: @create_attrs |> Map.put(:user_id, id))
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
       conn = get(conn, Routes.todo_path(conn, :show, id))
@@ -47,8 +76,10 @@ defmodule TodoBackendWeb.TodoControllerTest do
              } = json_response(conn, 200)["data"]
     end
 
-    test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.todo_path(conn, :create), todo: @invalid_attrs)
+    test "renders errors when data is invalid", %{conn: conn, user: %{user: %User{id: id}, jwt: jwt} = user} do
+      conn = conn
+      |> put_req_header("authorization", "Bearer #{jwt}")
+      conn = post(conn, Routes.todo_path(conn, :create, id), todo: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -92,5 +123,10 @@ defmodule TodoBackendWeb.TodoControllerTest do
   defp create_todo(_) do
     todo = fixture(:todo)
     {:ok, todo: todo}
+  end
+
+  defp create_user(_) do
+    user = user_fixture(:user)
+    {:ok, user: user}
   end
 end
