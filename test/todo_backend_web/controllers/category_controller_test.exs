@@ -1,7 +1,7 @@
 defmodule TodoBackendWeb.CategoryControllerTest do
   use TodoBackendWeb.ConnCase
 
-  alias TodoBackend.Category.Model
+  alias TodoBackend.Category.Repository.CategoryRepo
   alias TodoBackend.Category.Model.Category
 
   @create_attrs %{
@@ -13,7 +13,7 @@ defmodule TodoBackendWeb.CategoryControllerTest do
   @invalid_attrs %{name: nil}
 
   def fixture(:category) do
-    {:ok, category} = Model.create_category(@create_attrs)
+    {:ok, category} = CategoryRepo.create_category(@create_attrs)
     category
   end
 

@@ -15,6 +15,12 @@ defmodule TodoBackendWeb.Router do
     pipe_through :api
     post "/sign_up", UserController, :create
     post "/sign_in", UserController, :sign_in
+
+    put "/category/:id/update", CategoryController, :update
+    delete "/category/:id/delete", CategoryController, :delete
+    post "/category/create", CategoryController, :create
+    get "/category/all", CategoryController, :index
+    get "/category/:id/view", CategoryController, :show
   end
 
   scope "/api/v1", TodoBackendWeb do
@@ -36,12 +42,6 @@ defmodule TodoBackendWeb.Router do
     post "/comment/user/:user_id/todo/:todo_id/create", CommentController, :create
     get "/comment/all", CommentController, :index
     get "/comment/:id/view", CommentController, :show
-
-    put "/category/:id/update", CategoryController, :update
-    delete "/category/:id/delete", CategoryController, :delete
-    post "/category/create", CategoryController, :create
-    get "/category/all", CategoryController, :index
-    get "/category/:id/view", CategoryController, :show
 
     put "/todo_category/:id/update", TodoCategoryController, :update
     delete "/todo_category/:id/delete", TodoCategoryController, :delete
