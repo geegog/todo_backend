@@ -63,7 +63,7 @@ defmodule TodoBackendWeb.TodoControllerTest do
       conn = conn
       |> put_req_header("authorization", "Bearer #{jwt}")
 
-      conn = post(conn, Routes.todo_path(conn, :create, id), todo: @create_attrs |> Map.put(:user_id, id))
+      conn = post(conn, Routes.todo_path(conn, :create, user.user), todo: @create_attrs |> Map.put(:user_id, id))
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
       conn = get(conn, Routes.todo_path(conn, :show, id))
@@ -76,10 +76,10 @@ defmodule TodoBackendWeb.TodoControllerTest do
              } = json_response(conn, 200)["data"]
     end
 
-    test "renders errors when data is invalid", %{conn: conn, user: %{user: %User{id: id}, jwt: jwt} = user} do
+    test "renders errors when data is invalid", %{conn: conn, user: %{user: %User{id: _}, jwt: jwt} = user} do
       conn = conn
       |> put_req_header("authorization", "Bearer #{jwt}")
-      conn = post(conn, Routes.todo_path(conn, :create, id), todo: @invalid_attrs)
+      conn = post(conn, Routes.todo_path(conn, :create, user.user), todo: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -87,8 +87,10 @@ defmodule TodoBackendWeb.TodoControllerTest do
   describe "update todo" do
     setup [:create_todo]
 
-    test "renders todo when data is valid", %{conn: conn, todo: %Todo{id: id} = todo} do
-      conn = put(conn, Routes.todo_path(conn, :update, todo), todo: @update_attrs)
+    test "renders todo when data is valid", %{conn: conn, todo: {%Todo{id: id}, jwt} = todo} do
+      conn = conn
+      |> put_req_header("authorization", "Bearer #{jwt}")
+      conn = put(conn, Routes.todo_path(conn, :update, elem(todo, 0)), todo: @update_attrs)
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
       conn = get(conn, Routes.todo_path(conn, :show, id))
@@ -101,8 +103,10 @@ defmodule TodoBackendWeb.TodoControllerTest do
              } = json_response(conn, 200)["data"]
     end
 
-    test "renders errors when data is invalid", %{conn: conn, todo: todo} do
-      conn = put(conn, Routes.todo_path(conn, :update, todo), todo: @invalid_attrs)
+    test "renders errors when data is invalid", %{conn: conn, todo: {%Todo{id: _}, jwt} = todo} do
+      conn = conn
+      |> put_req_header("authorization", "Bearer #{jwt}")
+      conn = put(conn, Routes.todo_path(conn, :update, elem(todo, 0)), todo: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -110,12 +114,14 @@ defmodule TodoBackendWeb.TodoControllerTest do
   describe "delete todo" do
     setup [:create_todo]
 
-    test "deletes chosen todo", %{conn: conn, todo: todo} do
-      conn = delete(conn, Routes.todo_path(conn, :delete, todo))
+    test "deletes chosen todo", %{conn: conn, todo: {%Todo{id: _}, jwt} = todo} do
+      conn = conn
+      |> put_req_header("authorization", "Bearer #{jwt}")
+      conn = delete(conn, Routes.todo_path(conn, :delete, elem(todo, 0)))
       assert response(conn, 204)
 
       assert_error_sent 404, fn ->
-        get(conn, Routes.todo_path(conn, :show, todo))
+        get(conn, Routes.todo_path(conn, :show, elem(todo, 0)))
       end
     end
   end
