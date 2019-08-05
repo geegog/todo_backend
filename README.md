@@ -2,7 +2,7 @@
 
 This project is a demonstration of a working todo backend application in Elixir Phoenix Framework. It also shows how you can containerize you Phoenix application using Docker. Using VSCode IDE you can remotely access your container. It implements JWT authentication and using Argon2 for password encryption. It also contains unit and api test cases using ExUnit.
 
-You can download this project to get started quickly with Phoenic Framework.
+You can download this project to get started quickly with the Phoenix Framework.
 
 To start your Phoenix server:
 
@@ -24,3 +24,7 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
 
 ## Run TodoBackend Test
   * run test with `docker-compose run --rm test`
+
+## Contact
+Please contact me if you have any questions.
+  * https://www.linkedin.com/in/onuche-idoko-a9098436/
