@@ -58,7 +58,7 @@ defmodule TodoBackendWeb.CommentControllerTest do
       conn = conn
       |> put_req_header("authorization", "Bearer #{jwt}")
       conn = get(conn, Routes.comment_path(conn, :index))
-      assert length(json_response(conn, 200)["data"]) == length([elem(comment, 0)])
+      assert Map.get(hd(json_response(conn, 200)["data"]), "id") == elem(comment, 0).id
     end
   end
 

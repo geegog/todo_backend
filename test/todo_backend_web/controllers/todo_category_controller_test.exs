@@ -67,7 +67,7 @@ defmodule TodoBackendWeb.TodoCategoryControllerTest do
       |> put_req_header("authorization", "Bearer #{jwt}")
 
       conn = get(conn, Routes.todo_category_path(conn, :index))
-      assert length(json_response(conn, 200)["data"]) == length([elem(todo_category, 0)])
+      assert Map.get(hd(json_response(conn, 200)["data"]), "id") == elem(todo_category, 0).id
     end
   end
 

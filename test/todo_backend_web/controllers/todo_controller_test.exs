@@ -52,7 +52,7 @@ defmodule TodoBackendWeb.TodoControllerTest do
       |> put_req_header("authorization", "Bearer #{jwt}")
 
       conn = get(conn, Routes.todo_path(conn, :index))
-      assert length(json_response(conn, 200)["data"]) == length([elem(todo, 0)])
+      assert Map.get(hd(json_response(conn, 200)["data"]), "id") == elem(todo, 0).id
     end
   end
 
