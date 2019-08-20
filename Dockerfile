@@ -30,4 +30,7 @@ WORKDIR $APP_HOME
 
 EXPOSE 4000
 
+RUN useradd -m myuser
+USER myuser
+
 CMD ["mix", "phx.server"]
