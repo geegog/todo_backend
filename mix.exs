@@ -20,7 +20,7 @@ defmodule TodoBackend.MixProject do
   def application do
     [
       mod: {TodoBackend.Application, []},
-      extra_applications: [:logger, :runtime_tools, :timex]
+      extra_applications: [:logger, :runtime_tools]
     ]
   end
 
@@ -43,8 +43,7 @@ defmodule TodoBackend.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:comeonin, "~> 5.1.2"},
       {:argon2_elixir, "~> 2.0.5"},
-      {:guardian, "~> 1.2.1"},
-      {:timex, "~> 3.6.1"}
+      {:guardian, "~> 1.2.1"}
     ]
   end
 

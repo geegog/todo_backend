@@ -10,7 +10,7 @@ services:
     ports:
       - "82:80"
   web:
-    image: docker.io/geegog/docker-phoenix
+    build: .
     environment:
       - MIX_ENV=dev
       - PORT=4000
@@ -24,7 +24,7 @@ services:
     networks:
       - my-network
   test:
-    image: docker.io/geegog/docker-phoenix
+    build: .
     command: mix test
     environment:
       - MIX_ENV=test

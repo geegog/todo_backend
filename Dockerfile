@@ -1,5 +1,6 @@
 FROM elixir:1.9.0
 ENV DEBIAN_FRONTEND=noninteractive
+ENV MIX_HOME=/opt/mix
 
 # Install hex
 RUN mix local.hex --force
@@ -22,8 +23,9 @@ RUN apt-get update && apt-get install -y \
  && rm -rf /var/lib/apt/lists/*
 
 # When this image is run, make /app the current working directory
-ENV APP_HOME /app
+ENV APP_HOME /opt/app
 RUN mkdir -p $APP_HOME
+ADD . $APP_HOME
 WORKDIR $APP_HOME
 
 EXPOSE 4000
