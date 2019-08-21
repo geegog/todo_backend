@@ -1,6 +1,8 @@
 FROM elixir:1.9.0
 ENV DEBIAN_FRONTEND=noninteractive
 ENV MIX_HOME=/opt/mix
+# Compile elixir files for production
+ENV MIX_ENV prod
 
 # Install hex
 RUN mix local.hex --force
@@ -28,9 +30,13 @@ RUN mkdir -p $APP_HOME
 ADD . $APP_HOME
 WORKDIR $APP_HOME
 
-EXPOSE 4000
+RUN mix deps.get
+
+RUN mix compile \
+    && mix phx.digest
 
 RUN useradd -m myuser
 USER myuser
 
-CMD ["mix", "phx.server"]
+
+CMD MIX_ENV=prod mix phx.server
