@@ -38,5 +38,4 @@ RUN mix compile \
 RUN useradd -m myuser
 USER myuser
 
-
 CMD MIX_ENV=prod mix phx.server

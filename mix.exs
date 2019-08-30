@@ -43,7 +43,8 @@ defmodule TodoBackend.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:comeonin, "~> 5.1.2"},
       {:argon2_elixir, "~> 2.0.5"},
-      {:guardian, "~> 1.2.1"}
+      {:guardian, "~> 1.2.1"},
+      {:paginator, "~> 0.6"}
     ]
   end
 

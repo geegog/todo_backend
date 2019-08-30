@@ -18,8 +18,8 @@ defmodule TodoBackend.Task.Repository.TodoRepo do
 
   """
   def list_todos do
-    Repo.all(Todo)
-    |> Repo.preload(:user)
+    query = from(t in Todo, preload: [:user], order_by: [asc: t.inserted_at, asc: t.id], select: t)
+    Repo.paginate(query, cursor_fields: [:inserted_at, :id], limit: 4)
   end
 
   @doc """
