@@ -7,10 +7,10 @@ defmodule TodoBackendWeb.TodoController do
 
   action_fallback TodoBackendWeb.FallbackController
 
-  def index(conn, _params) do
-    %{entries: entries, metadata: metadata}  = TodoRepo.list_todos()
-    IO.inspect(metadata)
-    renwder(conn, "index.json", todos: entries)
+  def index(conn, params) do
+    IO.inspect(params)
+    todos  = TodoRepo.list_todos(params)
+    render(conn, "index.json", todos: todos)
   end
 
   def create(conn, %{"user_id" => user_id, "todo" => todo_params}) do

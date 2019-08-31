@@ -17,9 +17,14 @@ defmodule TodoBackend.Task.Repository.TodoRepo do
       [%Todo{}, ...]
 
   """
-  def list_todos do
+  def list_todos(params) do
     query = from(t in Todo, preload: [:user], order_by: [asc: t.inserted_at, asc: t.id], select: t)
-    Repo.paginate(query, cursor_fields: [:inserted_at, :id], limit: 4)
+
+    cond do
+      params["after"] !== nil -> Repo.paginate(query, after: params["after"], cursor_fields: [:inserted_at, :id], limit: 10)
+      params["before"] !== nil -> Repo.paginate(query, before: params["before"], cursor_fields: [:inserted_at, :id], limit: 10)
+      true -> Repo.paginate(query, cursor_fields: [:inserted_at, :id], limit: 10)
+    end
   end
 
   @doc """

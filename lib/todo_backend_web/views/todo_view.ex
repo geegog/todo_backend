@@ -3,7 +3,7 @@ defmodule TodoBackendWeb.TodoView do
   alias TodoBackendWeb.TodoView
 
   def render("index.json", %{todos: todos}) do
-    %{data: render_many(todos, TodoView, "todo.json")}
+    %{data: render_many(todos.entries, TodoView, "todo.json"), metadata: Map.from_struct(todos.metadata)}
   end
 
   def render("show.json", %{todo: todo}) do
