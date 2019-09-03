@@ -33,7 +33,7 @@ defmodule TodoBackend.Task.ModelTest do
 
     test "list_todos/0 returns all todos" do
       todo = todo_fixture()
-      assert length(TodoRepo.list_todos()) == length([todo])
+      assert length(TodoRepo.list_todos(%{}).entries) == length([todo])
     end
 
     test "get_todo!/1 returns the todo with given id" do

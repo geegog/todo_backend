@@ -8,7 +8,6 @@ defmodule TodoBackendWeb.TodoController do
   action_fallback TodoBackendWeb.FallbackController
 
   def index(conn, params) do
-    IO.inspect(params)
     todos  = TodoRepo.list_todos(params)
     render(conn, "index.json", todos: todos)
   end
