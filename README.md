@@ -30,4 +30,4 @@ The app is also available on Heroku (https://gentle-bayou-12059.herokuapp.com)
 
 ## Contact
 Please contact me if you have any questions.
-  * https://www.linkedin.com/in/onuche-idoko-a9098436/
+  * https://www.linkedin.com/in/onuche-akor-idoko-a9098436/
