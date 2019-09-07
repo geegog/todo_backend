@@ -3,5 +3,5 @@ defmodule TodoBackend.Repo do
     otp_app: :todo_backend,
     adapter: Ecto.Adapters.Postgres
 
-    use Paginator
+    use Scrivener, page_size: 10
 end

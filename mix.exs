@@ -20,7 +20,7 @@ defmodule TodoBackend.MixProject do
   def application do
     [
       mod: {TodoBackend.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :scrivener_ecto]
     ]
   end
 
@@ -44,7 +44,7 @@ defmodule TodoBackend.MixProject do
       {:comeonin, "~> 5.1.2"},
       {:argon2_elixir, "~> 2.0.5"},
       {:guardian, "~> 1.2.1"},
-      {:paginator, "~> 0.6"}
+      {:scrivener_ecto, "~> 2.0"}
     ]
   end
 
