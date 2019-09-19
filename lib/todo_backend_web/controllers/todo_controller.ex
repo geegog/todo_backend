@@ -15,8 +15,7 @@ defmodule TodoBackendWeb.TodoController do
   def create(conn, %{"user_id" => user_id, "category_id" => category_id, "todo" => todo_params}) do
     user = UserRepo.get_user!(user_id)
 
-    with #{:error, _} <- IO.inspect(failed_operation),
-    {:ok, %{todo: %Todo{} = todo}} <- TodoRepo.create_todo_category(Map.put(todo_params, "user_id", user.id), %{"category_id" => category_id}) do
+    with {:ok, %{todo: %Todo{} = todo}} <- TodoRepo.create_todo_category(Map.put(todo_params, "user_id", user.id), %{"category_id" => category_id}) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.todo_path(conn, :show, todo))

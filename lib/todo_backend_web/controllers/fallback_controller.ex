@@ -13,6 +13,13 @@ defmodule TodoBackendWeb.FallbackController do
     |> render("error.json", changeset: changeset)
   end
 
+  def call(conn, {:error, failed_operation, failed_value, changes_so_far}) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> put_view(TodoBackendWeb.ChangesetView)
+    |> render("error.json", changeset: failed_value)
+  end
+
   def call(conn, {:error, :not_found}) do
     conn
     |> put_status(:not_found)
