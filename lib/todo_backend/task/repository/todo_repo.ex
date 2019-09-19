@@ -7,6 +7,8 @@ defmodule TodoBackend.Task.Repository.TodoRepo do
   alias TodoBackend.Repo
 
   alias TodoBackend.Task.Model.Todo
+  alias TodoBackend.Category.Model.TodoCategory
+  alias Ecto.Multi
 
   @doc """
   Returns the list of todos.
@@ -60,6 +62,15 @@ defmodule TodoBackend.Task.Repository.TodoRepo do
     %Todo{}
     |> Todo.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def create_todo_category(attrs \\ %{}, todoCategoryAttrs) do
+    Multi.new
+    |> Multi.insert(:todo, Todo.changeset(%Todo{}, attrs))
+    |> Multi.run(:todoCategory, fn _repo, %{todo: todo} ->
+      Repo.insert(TodoCategory.changeset(%TodoCategory{}, Map.put(todoCategoryAttrs, "todo_id", todo.id)))
+    end)
+    |> Repo.transaction()
   end
 
   def preload(%Todo{} = todo) do

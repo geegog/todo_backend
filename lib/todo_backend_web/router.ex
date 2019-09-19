@@ -33,7 +33,7 @@ defmodule TodoBackendWeb.Router do
 
     put "/todo/:id/update", TodoController, :update
     delete "/todo/:id/delete", TodoController, :delete
-    post "/todo/user/:user_id/create", TodoController, :create
+    post "/todo/user/:user_id/category/:category_id/create", TodoController, :create
     get "/todo/:id/view", TodoController, :show
     get "/todo/all", TodoController, :index
 

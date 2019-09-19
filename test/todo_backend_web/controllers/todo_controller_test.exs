@@ -5,7 +5,12 @@ defmodule TodoBackendWeb.TodoControllerTest do
   alias TodoBackend.User.Model.User
   alias TodoBackend.Task.Repository.TodoRepo
   alias TodoBackend.User.Repository.UserRepo
+  alias TodoBackend.Category.Repository.CategoryRepo
   alias TodoBackend.Guardian
+
+  @create_category_attrs %{
+    name: "some name"
+  }
 
   @create_user_attrs %{
     email: "some@email.com",
@@ -34,9 +39,15 @@ defmodule TodoBackendWeb.TodoControllerTest do
   end
 
   def user_fixture(:user) do
+    category = category_fixture(:category)
     {:ok, user} = UserRepo.create_user(@create_user_attrs)
     {:ok, jwt, _claims} = Guardian.encode_and_sign(user)
-    %{user: user, jwt: jwt}
+    %{user: user, jwt: jwt, category}
+  end
+
+  def category_fixture(:category) do
+    {:ok, category} = CategoryRepo.create_category(@create_category_attrs)
+    category
   end
 
   setup %{conn: conn} do
@@ -76,10 +87,10 @@ defmodule TodoBackendWeb.TodoControllerTest do
              } = json_response(conn, 200)["data"]
     end
 
-    test "renders errors when data is invalid", %{conn: conn, user: %{user: %User{id: _}, jwt: jwt} = user} do
+    test "renders errors when data is invalid", %{conn: conn, user: %{user: %User{id: _}, jwt: jwt, category: category} = user} do
       conn = conn
       |> put_req_header("authorization", "Bearer #{jwt}")
-      conn = post(conn, Routes.todo_path(conn, :create, user.user), todo: @invalid_attrs)
+      conn = post(conn, Routes.todo_path(conn, :create, user.user, category.id), todo: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -134,5 +145,10 @@ defmodule TodoBackendWeb.TodoControllerTest do
   defp create_user(_) do
     user = user_fixture(:user)
     {:ok, user: user}
+  end
+
+  defp create_category(_) do
+    category = category_fixture(:category)
+    {:ok, category: category}
   end
 end
