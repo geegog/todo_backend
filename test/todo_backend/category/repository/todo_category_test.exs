@@ -58,7 +58,7 @@ defmodule TodoBackend.Category.Repository.TodoCategoryTest do
 
     test "list_todo_categories/0 returns all todo_categories" do
       todo_category = todo_category_fixture() |> TodoCategoryRepo.preload
-      assert TodoCategoryRepo.list_todo_categories() == [todo_category]
+      assert length(TodoCategoryRepo.list_todo_categories(%{}).entries) == length([todo_category])
     end
 
     test "get_todo_category!/1 returns the todo_category with given id" do
