@@ -17,8 +17,9 @@ defmodule TodoBackend.Category.Repository.TodoCategoryRepo do
       [%TodoCategory{}, ...]
 
   """
-  def list_todo_categories do
-    Repo.all(TodoCategory) |> Repo.preload(:todo) |> Repo.preload(:category)
+  def list_todo_categories(params) do
+    query = from(tc in TodoCategory, preload: [:todo, :category], order_by: [desc: tc.inserted_at, desc: tc.id], select: tc)
+    Repo.paginate(query, params)
   end
 
   @doc """

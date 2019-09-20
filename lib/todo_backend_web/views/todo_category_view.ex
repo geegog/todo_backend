@@ -3,7 +3,11 @@ defmodule TodoBackendWeb.TodoCategoryView do
   alias TodoBackendWeb.TodoCategoryView
 
   def render("index.json", %{todo_categories: todo_categories}) do
-    %{data: render_many(todo_categories, TodoCategoryView, "todo_category.json")}
+    %{data: render_many(todo_categories, TodoCategoryView, "todo_category.json"),
+    metadata: %{page_number: todo_categories.page_number,
+    page_size: todo_categories.page_size,
+    total_pages: todo_categories.total_pages,
+    total_entries: todo_categories.total_entries}}
   end
 
   def render("show.json", %{todo_category: todo_category}) do

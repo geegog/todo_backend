@@ -8,8 +8,8 @@ defmodule TodoBackendWeb.TodoCategoryController do
 
   action_fallback TodoBackendWeb.FallbackController
 
-  def index(conn, _params) do
-    todo_categories = TodoCategoryRepo.list_todo_categories()
+  def index(conn, params) do
+    todo_categories = TodoCategoryRepo.list_todo_categories(params)
     render(conn, "index.json", todo_categories: todo_categories)
   end
 
