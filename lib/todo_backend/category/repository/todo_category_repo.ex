@@ -7,6 +7,8 @@ defmodule TodoBackend.Category.Repository.TodoCategoryRepo do
   alias TodoBackend.Repo
 
   alias TodoBackend.Category.Model.TodoCategory
+  alias TodoBackend.Task.Model.Comment
+  alias TodoBackend.Task.Model.Todo
 
   @doc """
   Returns the list of todo_categories.
@@ -18,7 +20,18 @@ defmodule TodoBackend.Category.Repository.TodoCategoryRepo do
 
   """
   def list_todo_categories(params) do
-    query = from(tc in TodoCategory, preload: [:todo, :category], order_by: [desc: tc.inserted_at, desc: tc.id], select: tc)
+    query =
+      from(tc in TodoCategory,
+        left_join: t in Todo,
+        on: t.id == tc.todo_id,
+        left_join: c in Comment,
+        on: c.todo_id == t.id,
+        preload: [:todo, :category],
+        order_by: [desc: tc.inserted_at, desc: tc.id],
+        group_by: tc.id,
+        select: %{todo_category: tc, comments_count: count(c.id)}
+      )
+
     Repo.paginate(query, params)
   end
 
@@ -36,7 +49,8 @@ defmodule TodoBackend.Category.Repository.TodoCategoryRepo do
       ** (Ecto.NoResultsError)
 
   """
-  def get_todo_category!(id), do: Repo.get!(TodoCategory, id) |> Repo.preload(:todo) |> Repo.preload(:category)
+  def get_todo_category!(id),
+    do: Repo.get!(TodoCategory, id) |> Repo.preload(:todo) |> Repo.preload(:category)
 
   @doc """
   Creates a todo_category.
