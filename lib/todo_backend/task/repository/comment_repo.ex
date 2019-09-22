@@ -21,6 +21,21 @@ defmodule TodoBackend.Task.Repository.CommentRepo do
     Repo.all(Comment) |> Repo.preload(:user) |> Repo.preload(:todo)
   end
 
+    @doc """
+  Returns the list of comments for todo.
+
+  ## Examples
+
+      iex> list_comments()
+      [%Comment{}, ...]
+
+  """
+  def list_todo_comments(todo_id, params) do
+    query = from(c in Comment, where: c.todo_id == ^todo_id, preload: [:user, :todo], order_by: [desc: c.inserted_at, desc: c.id], select: c)
+
+    Repo.paginate(query, params)
+  end
+
   @doc """
   Gets a single comment.
 

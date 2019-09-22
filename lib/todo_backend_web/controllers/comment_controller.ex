@@ -13,6 +13,11 @@ defmodule TodoBackendWeb.CommentController do
     render(conn, "index.json", comments: comments)
   end
 
+  def todo_comments(conn, params) do
+    comments = CommentRepo.list_todo_comments(params["todo_id"], params)
+    render(conn, "index.json", comments: comments)
+  end
+
   def create(conn, %{"user_id" => user_id, "todo_id" => todo_id, "comment" => comment_params}) do
     user = UserRepo.get_user!(user_id)
     todo = TodoRepo.get_todo!(todo_id)

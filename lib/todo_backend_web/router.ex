@@ -41,6 +41,7 @@ defmodule TodoBackendWeb.Router do
     delete "/comment/:id/delete", CommentController, :delete
     post "/comment/user/:user_id/todo/:todo_id/create", CommentController, :create
     get "/comment/all", CommentController, :index
+    get "/comment/todo/:todo_id/all", CommentController, :todo_comments
     get "/comment/:id/view", CommentController, :show
 
     put "/todo_category/:id/update", TodoCategoryController, :update
