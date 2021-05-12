@@ -19,6 +19,7 @@ defmodule TodoBackendWeb.CommentController do
   end
 
   def create(conn, %{"user_id" => user_id, "todo_id" => todo_id, "comment" => comment_params}) do
+
     user = UserRepo.get_user!(user_id)
     todo = TodoRepo.get_todo!(todo_id)
 
