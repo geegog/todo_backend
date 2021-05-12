@@ -13,7 +13,6 @@ defmodule TodoBackendWeb.TodoController do
   end
 
   def create(conn, %{"user_id" => user_id, "category_id" => category_id, "todo" => todo_params}) do
-
     user = UserRepo.get_user!(user_id)
 
     with {:ok, %{todo: %Todo{} = todo}} <- TodoRepo.create_todo_category(Map.put(todo_params, "user_id", user.id), %{"category_id" => category_id}) do
