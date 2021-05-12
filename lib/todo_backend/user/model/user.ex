@@ -1,7 +1,7 @@
 defmodule TodoBackend.User.Model.User do
   use Ecto.Schema
   import Ecto.Changeset
-  import Argon2, only: [hash_pwd_salt: 1]
+  # import Argon2, only: [hash_pwd_salt: 1]
 
   schema "users" do
     field :email, :string
